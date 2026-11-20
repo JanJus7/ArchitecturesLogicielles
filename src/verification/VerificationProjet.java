@@ -26,5 +26,7 @@ public class VerificationProjet {
     public boolean estValide(Projet projet) {
         return validation(projet).isEmpty();
     }
+    
+    // TODO: add getStatus??? podobno operowanie na booleanach nie jest najlepsze...
 }
 
