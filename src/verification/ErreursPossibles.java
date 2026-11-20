@@ -27,7 +27,7 @@ public enum ErreursPossibles {
                 return false;
             }
 
-            return projet.getDateFin().isBefore(projet.getDateDebut());
+            return !projet.getDateFin().isBefore(projet.getDateDebut());
         }
     },
 
