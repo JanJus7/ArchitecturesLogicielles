@@ -8,7 +8,8 @@ public class ProjetFactory {
     private int projetsCrees = 0;
 
     public Projet createProjectStandard(String nomProjet, LocalDate dateDebut, String nomEquipe, int nbMembres) {
-        Projet pStd = new Projet(nomProjet, dateDebut, dateDebut.plusWeeks(3));
+        LocalDate fin = (dateDebut != null) ? dateDebut.plusWeeks(3) : null;
+        Projet pStd = new Projet(nomProjet, dateDebut, fin);
 
         Equipe equipe = new Equipe(nomEquipe, nbMembres);
         pStd.ajouterEquipe(equipe);
