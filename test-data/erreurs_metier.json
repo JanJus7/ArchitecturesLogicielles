@@ -1,0 +1,35 @@
+[
+  {
+    "nom": "DureeNegative",
+    "dateDebut": "2026-01-01",
+    "dateFin": "2026-02-01",
+    "equipes": [
+      { "nom": "Dev", "nbMembres": 3 }
+    ],
+    "taches": [
+      { "intitule": "BadTask", "duree": -5, "estTerminee": false, "equipeAffectee": "Dev" }
+    ]
+  },
+  {
+    "nom": "EquipeInconnue",
+    "dateDebut": "2026-01-01",
+    "dateFin": "2026-02-01",
+    "equipes": [
+      { "nom": "Dev", "nbMembres": 3 }
+    ],
+    "taches": [
+      { "intitule": "OrphanTask", "duree": 5, "estTerminee": false, "equipeAffectee": "Fantome" }
+    ]
+  },
+  {
+    "nom": "DoublesEquipes",
+    "dateDebut": "2026-01-01",
+    "dateFin": "2026-02-01",
+    "equipes": [
+      { "nom": "Dev", "nbMembres": 2 },
+      { "nom": "dev", "nbMembres": 4 }
+    ],
+    "taches": []
+  },
+  null
+]

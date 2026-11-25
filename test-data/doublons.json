@@ -1,0 +1,24 @@
+[
+  {
+    "nom": "ProjetDup",
+    "dateDebut": "2026-01-01",
+    "dateFin": "2026-02-01",
+    "equipes": [
+      { "nom": "A", "nbMembres": 2 }
+    ],
+    "taches": [
+      { "intitule": "T1", "duree": 2, "estTerminee": false, "equipeAffectee": "A" }
+    ]
+  },
+  {
+    "nom": "ProjetDup",
+    "dateDebut": "2026-03-01",
+    "dateFin": "2026-04-01",
+    "equipes": [
+      { "nom": "B", "nbMembres": 3 }
+    ],
+    "taches": [
+      { "intitule": "T2", "duree": 3, "estTerminee": false, "equipeAffectee": "B" }
+    ]
+  }
+]

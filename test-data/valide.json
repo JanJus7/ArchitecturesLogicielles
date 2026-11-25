@@ -1,0 +1,26 @@
+[
+  {
+    "nom": "Alpha",
+    "dateDebut": "2026-01-10",
+    "dateFin": "2026-03-10",
+    "equipes": [
+      { "nom": "Backend", "nbMembres": 4 },
+      { "nom": "Frontend", "nbMembres": 3 }
+    ],
+    "taches": [
+      { "intitule": "API", "duree": 10, "estTerminee": false, "equipeAffectee": "Backend" },
+      { "intitule": "UI", "duree": 5, "estTerminee": true, "equipeAffectee": "Frontend" }
+    ]
+  },
+  {
+    "nom": "Beta",
+    "dateDebut": "2026-04-01",
+    "dateFin": "2026-04-01",
+    "equipes": [
+      { "nom": "Core", "nbMembres": 2 }
+    ],
+    "taches": [
+      { "intitule": "Setup", "duree": 1, "estTerminee": false, "equipeAffectee": "Core" }
+    ]
+  }
+]

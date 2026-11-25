@@ -1,0 +1,23 @@
+[
+  {
+    "nom": "ProjetSansDate",
+    "dateFin": "2026-05-01",
+    "equipes": [
+      { "nom": "Eq1", "nbMembres": 2 }
+    ],
+    "taches": [
+      { "intitule": "T1", "duree": 3, "estTerminee": false, "equipeAffectee": "Eq1" }
+    ]
+  },
+  {
+    "nom": "ProjetValideApresErreur",
+    "dateDebut": "2026-05-01",
+    "dateFin": "2026-06-01",
+    "equipes": [
+      { "nom": "Eq2", "nbMembres": 3 }
+    ],
+    "taches": [
+      { "intitule": "T2", "duree": 4, "estTerminee": false, "equipeAffectee": "Eq2" }
+    ]
+  }
+]
