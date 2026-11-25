@@ -23,10 +23,21 @@ public class VerificationProjet {
         return erreurs;
     }
 
+    public List<String> getErreurs(Projet projet) {
+        List<ErreursPossibles> erreurs = validation(projet);
+        List<String> listErreurs = new ArrayList<>();
+        erreurs.forEach((erreur) -> {
+            listErreurs.add(erreur.getMessage());
+        });
+
+
+
+        return listErreurs;
+    }
+
     public boolean estValide(Projet projet) {
         return validation(projet).isEmpty();
     }
-    
-    // TODO: add getStatus??? podobno operowanie na booleanach nie jest najlepsze...
+
 }
 
