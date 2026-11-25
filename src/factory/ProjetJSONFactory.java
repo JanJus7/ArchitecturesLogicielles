@@ -7,6 +7,7 @@ import gestion.Tache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import verification.VerificationProjet;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,29 +34,29 @@ public class ProjetJSONFactory {
      * @return Projet
      */
     private Projet createOneProjet(JSONObject projetJson) {
-        String projetNom = projetJson.getString("nom");
-        LocalDate dateDeb = LocalDate.parse(projetJson.getString("dateDebut"));
-        LocalDate dateFin = LocalDate.parse(projetJson.getString("dateFin"));
+        String projetNom = projetJson.optString("nom", null);
+        LocalDate dateDeb = LocalDate.parse(projetJson.optString("dateDebut", null));
+        LocalDate dateFin = LocalDate.parse(projetJson.optString("dateFin", null));
 
         Projet projet = new Projet(projetNom, dateDeb, dateFin);
 
-        JSONArray equipesJson = projetJson.getJSONArray("equipes");
+        JSONArray equipesJson = projetJson.optJSONArray("equipes");
 
         for (int i = 0; i < equipesJson.length(); i++) {
-            JSONObject equipeJson = equipesJson.getJSONObject(i);
-            String nom = equipeJson.getString("nom");
-            int nbMembres = equipeJson.getInt("nbMembres");
+            JSONObject equipeJson = equipesJson.optJSONObject(i);
+            String nom = equipeJson.optString("nom", null);
+            int nbMembres = equipeJson.optInt("nbMembres", 0);
             Equipe equipe = new Equipe(nom, nbMembres);
             projet.ajouterEquipe(equipe);
         }
 
-        JSONArray tachesJson = projetJson.getJSONArray("taches");
+        JSONArray tachesJson = projetJson.optJSONArray("taches");
 
         for (int i = 0; i < tachesJson.length(); i++) {
-            JSONObject tacheJson = tachesJson.getJSONObject(i);
-            String intitule = tacheJson.getString("intitule");
-            int duree = tacheJson.getInt("duree");
-            boolean estTerminee = tacheJson.getBoolean("estTerminee");
+            JSONObject tacheJson = tachesJson.optJSONObject(i);
+            String intitule = tacheJson.optString("intitule", null);
+            int duree = tacheJson.optInt("duree", 0);
+            boolean estTerminee = tacheJson.optBoolean("estTerminee", false);
             String eqAffectee = tacheJson.optString("equipeAffectee", null);
             Equipe equipeAffectee = null;
 
@@ -71,7 +72,15 @@ public class ProjetJSONFactory {
             projet.ajouterTache(tache);
         }
 
-        return projet;
+        VerificationProjet verification = new VerificationProjet();
+
+        boolean estValide = verification.estValide(projet);
+
+        if (estValide) {
+            return projet;
+        }
+
+        return null;
     }
 
     public List<Projet> createProjetsFromJSON(String filename) throws IOException {
@@ -79,7 +88,7 @@ public class ProjetJSONFactory {
         JSONArray projetsJson = this.processJSON(filename);
 
         for (int i = 0; i < projetsJson.length(); i++) {
-            JSONObject projetObj = projetsJson.getJSONObject(i);
+            JSONObject projetObj = projetsJson.optJSONObject(i);
             Projet compProjet = this.createOneProjet(projetObj);
             projets.add(compProjet);
             this.projetsCrees++;
