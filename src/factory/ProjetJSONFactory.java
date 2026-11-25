@@ -20,19 +20,30 @@ import java.util.Objects;
 
 public class ProjetJSONFactory {
     private int projetsCrees = 0;
+    private final VerificationProjet verification = new VerificationProjet();
+    private final List<String> erreurs = new ArrayList<>();
 
     /*
      * helper function
      * @return JSONArray
      */
     private JSONArray processJSON(String filename) {
+        if (filename == null) {
+            erreurs.add("Filename null");
+            return new JSONArray();
+        }
         try (FileReader reader = new FileReader(filename)) {
             return new JSONArray(new JSONTokener(reader));
         } catch (IOException | JSONException e) {
+            erreurs.add("Erreur: " + e.getMessage());
             return  new JSONArray();
         }
     }
 
+    /*
+     * helper function
+     * @return LocalDate
+     */
     private LocalDate parseDate(String date) {
         if (date == null || date.isEmpty()) {
             return null;
@@ -96,18 +107,21 @@ public class ProjetJSONFactory {
             }
         }
 
-        VerificationProjet verification = new VerificationProjet();
+        List<String> erreuresList = this.verification.getErreurs(projet);
 
-        boolean estValide = verification.estValide(projet);
-
-        if (estValide) {
+        if (erreuresList.isEmpty()) {
             return projet;
         }
+
+        erreuresList.forEach((item) -> {
+            this.erreurs.add("Projet " + projetNom + ", " + item);
+        });
 
         return null;
     }
 
     public List<Projet> createProjetsFromJSON(String filename) {
+        erreurs.clear();
         List<Projet> projets = new ArrayList<>();
         JSONArray projetsJson = this.processJSON(filename);
 
@@ -119,6 +133,8 @@ public class ProjetJSONFactory {
                     projets.add(compProjet);
                     this.projetsCrees++;
                 }
+            } else {
+                this.erreurs.add("Index " + i + " faux");
             }
         }
 
@@ -127,5 +143,9 @@ public class ProjetJSONFactory {
 
     public int getProjetsCrees() {
         return projetsCrees;
+    }
+
+    public List<String> getErreurs() {
+        return erreurs;
     }
 }
