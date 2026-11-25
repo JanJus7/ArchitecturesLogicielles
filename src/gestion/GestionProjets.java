@@ -6,170 +6,65 @@ import verification.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class GestionProjets {
     private final ProjetFactory factory;
-    private final List<Projet> projets;
-    private final VerificationProjet validator;
+    private final CatalogProjets catalogProjets;
+    private final ProjetJSONFactory projectJSONFactory;
+    private final VerificationProjet verificationProjet;
 
     public GestionProjets() {
         this.factory = new ProjetFactory();
-        this.projets = new ArrayList<>();
-        this.validator = new VerificationProjet();
-
+        this.catalogProjets = new CatalogProjets();
+        this.projectJSONFactory = new ProjetJSONFactory();
+        this.verificationProjet = new VerificationProjet();
     }
 
     public boolean createProjet(String nomProj, LocalDate deb, String nomEquipe, int nbMembres) {
-
-        if (this.getProjetParNom(nomProj) != null) {
-            return false;
-        }
-
         Projet projet = this.factory.createProjectStandard(nomProj, deb, nomEquipe, nbMembres);
+        return this.catalogProjets.ajouterProjet(projet);
+    }
 
-        boolean isValide = validator.estValide(projet);
+    public List<String> importerProjetsJSON(String filename) {
+        List<Projet> importes = this.projectJSONFactory.createProjetsFromJSON(filename);
+        List<String> rapport = new ArrayList<>(this.projectJSONFactory.getErreurs());
+        rapport.addAll(this.catalogProjets.ajouterProjets(importes));
+        return rapport;
+    }
 
-        if (isValide) {
-            this.projets.add(projet);
-            return true;
-        }
-
-        return false;
+    public List<String> verifierProjet(String nomProj) {
+        return this.verificationProjet.getErreurs(this.catalogProjets.getProjetParNom(nomProj));
     }
 
     public Projet getProjetParNom(String nomProj) {
-        for (Projet p : this.projets) {
-            if (Objects.equals(p.getNom(), nomProj)) {
-                return p;
-            }
-        }
-
-        return null;
+        return this.catalogProjets.getProjetParNom(nomProj);
     }
 
-    /*
-     * UPDATES
-     */
-
     public boolean updateProjetNom(String nomProj, String newNomProj) {
-        Projet p = this.getProjetParNom(nomProj);
-
-        if (p == null) {
-            return false;
-        }
-
-        if (this.getProjetParNom(newNomProj) != null) {
-            return false;
-        }
-
-        p.setNom(newNomProj);
-        boolean isValide = validator.estValide(p);
-
-        if (!isValide) {
-            p.setNom(nomProj);
-            return false;
-        }
-        return true;
+        return this.catalogProjets.updateProjetNom(nomProj, newNomProj);
     }
 
     public boolean updateProjetDateDeb(String nomProj, LocalDate newDateDeb) {
-        Projet p = this.getProjetParNom(nomProj);
-
-        if (p == null) {
-            return false;
-        }
-
-        LocalDate prevDateDeb = p.getDateDebut();
-
-        p.setDateDebut(newDateDeb);
-
-        boolean isValide = validator.estValide(p);
-
-        if (!isValide) {
-            p.setDateDebut(prevDateDeb);
-            return false;
-        }
-
-        return true;
+        return this.catalogProjets.updateProjetDateDeb(nomProj, newDateDeb);
     }
 
     public boolean updateProjetDateFin(String nomProj, LocalDate newDateFin) {
-        Projet p = this.getProjetParNom(nomProj);
-
-        if (p == null) {
-            return false;
-        }
-
-        LocalDate prevDateFin = p.getDateFin();
-
-        p.setDateFin(newDateFin);
-
-        boolean isValide = validator.estValide(p);
-
-        if (!isValide) {
-            p.setDateFin(prevDateFin);
-            return false;
-        }
-
-        return true;
+        return this.catalogProjets.updateProjetDateFin(nomProj, newDateFin);
     }
 
     public boolean updateProjetEquipes(String nomProj, List<Equipe> newEquipes) {
-        Projet p = this.getProjetParNom(nomProj);
-
-        if (p == null) {
-            return false;
-        }
-
-        List<Equipe> prevEquipes = p.getEquipes();
-
-        p.setEquipes(newEquipes);
-
-        boolean isValide = validator.estValide(p);
-
-        if (!isValide) {
-            p.setEquipes(prevEquipes);
-            return false;
-        }
-
-        return true;
+        return this.catalogProjets.updateProjetEquipes(nomProj, newEquipes);
     }
 
     public boolean updateProjetTaches(String nomProj, List<Tache> newTaches) {
-        Projet p = this.getProjetParNom(nomProj);
-
-        if (p == null) {
-            return false;
-        }
-
-        List<Tache> prevTaches = p.getTaches();
-
-        p.setTaches(newTaches);
-
-        boolean isValide = validator.estValide(p);
-
-        if (!isValide) {
-            p.setTaches(prevTaches);
-            return false;
-        }
-
-        return true;
+        return this.catalogProjets.updateProjetTaches(nomProj, newTaches);
     }
 
     public boolean supprimeProjet(String nomProjet) {
-        Projet p = this.getProjetParNom(nomProjet);
-
-        if (p != null) {
-            this.projets.remove(p);
-            return true;
-        }
-
-        return false;
+        return this.catalogProjets.supprimeProjet(nomProjet);
     }
 
-    public ArrayList<Projet> getListeProjet() {
-        return new ArrayList<>(this.projets);
+    public List<Projet> getListeProjet() {
+        return this.catalogProjets.getListeProjet();
     }
-
 }
