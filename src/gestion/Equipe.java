@@ -1,6 +1,8 @@
 package gestion;
 
-public class Equipe {
+import visiteur.*;
+
+public class Equipe implements Visitable {
     private String nom;
     private int nbMembres;
 
@@ -31,5 +33,10 @@ public class Equipe {
         this.nbMembres = nbMembres;
     }
 
-
+    @Override
+    public void accepter(Visiteur visiteur) {
+        if (visiteur != null) {
+            visiteur.visiter(this);
+        }
+    }
 }

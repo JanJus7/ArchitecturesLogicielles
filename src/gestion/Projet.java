@@ -1,10 +1,12 @@
 package gestion;
 
+import visiteur.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Projet {
+public class Projet implements Visitable {
     private String nom;
     private LocalDate dateFin;
     private LocalDate dateDebut;
@@ -75,5 +77,12 @@ public class Projet {
 
     public void ajouterTache(Tache tache) {
         this.taches.add(tache);
+    }
+
+    @Override
+    public void accepter(Visiteur visiteur) {
+        if (visiteur != null) {
+            visiteur.visiter(this);
+        }
     }
 }

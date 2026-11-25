@@ -1,6 +1,8 @@
 package gestion;
 
-public class Tache {
+import visiteur.*;
+
+public class Tache implements Visitable {
     private String intitule;
     private int duree;
     private boolean estTerminee;
@@ -49,6 +51,13 @@ public class Tache {
 
     public void setEquipeAffectee(Equipe equipeAffectee) {
         this.equipeAffectee = equipeAffectee;
+    }
+
+    @Override
+    public void accepter(Visiteur visiteur) {
+        if (visiteur != null) {
+            visiteur.visiter(this);
+        }
     }
 }
 
