@@ -1,5 +1,5 @@
 package verification;
-import factory.*;
+
 import gestion.*;
 
 import java.util.HashSet;
@@ -34,14 +34,21 @@ public enum ErreursPossibles {
     DUREE_TACHE_INVALIDE("Le duree de la tache ne peut pas etre negatif.") {
         @Override
         public boolean estValide(Projet projet) {
+            if (projet.getTaches() == null) {
+                return false;
+            }
+
             for (Tache t : projet.getTaches()) {
+                if (t == null) {
+                    return false;
+                }
+
                 if (t.getDuree() <= 0) {
                     return false;
                 }
             }
 
             return true;
-
         }
     },
 
@@ -49,8 +56,15 @@ public enum ErreursPossibles {
         @Override
         public boolean estValide(Projet projet) {
             Set<String> nomsVus = new HashSet<>();
+            if (projet.getEquipes() == null) {
+                return false;
+            }
             for (Equipe e : projet.getEquipes()) {
-                if (e.getNom() == null || !nomsVus.add(e.getNom().trim().toLowerCase())) {
+                if (e == null) {
+                    return false;
+                }
+
+                if (e.getNom() == null || e.getNom().trim().isEmpty() || !nomsVus.add(e.getNom().trim().toLowerCase())) {
                     return false;
                 }
             }
@@ -70,6 +84,10 @@ public enum ErreursPossibles {
             }
 
             for (Tache t : projet.getTaches()) {
+                if (t == null) {
+                    return false;
+                }
+
                 Equipe eAf = t.getEquipeAffectee();
                 if (eAf == null || !projet.getEquipes().contains(eAf)) {
                     return false;
