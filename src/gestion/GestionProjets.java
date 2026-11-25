@@ -63,10 +63,7 @@ public class GestionProjets {
             return false;
         }
 
-        if (newNomProj != null && !newNomProj.isEmpty()) {
-            p.setNom(newNomProj);
-        }
-
+        p.setNom(newNomProj);
         boolean isValide = validator.estValide(p);
 
         if (!isValide) {
@@ -85,9 +82,7 @@ public class GestionProjets {
 
         LocalDate prevDateDeb = p.getDateDebut();
 
-        if (newDateDeb != null) {
-            p.setDateDebut(newDateDeb);
-        }
+        p.setDateDebut(newDateDeb);
 
         boolean isValide = validator.estValide(p);
 
@@ -108,9 +103,7 @@ public class GestionProjets {
 
         LocalDate prevDateFin = p.getDateFin();
 
-        if (newDateFin != null) {
-            p.setDateFin(newDateFin);
-        }
+        p.setDateFin(newDateFin);
 
         boolean isValide = validator.estValide(p);
 
@@ -131,9 +124,7 @@ public class GestionProjets {
 
         List<Equipe> prevEquipes = p.getEquipes();
 
-        if (newEquipes != null) {
-            p.setEquipes(newEquipes);
-        }
+        p.setEquipes(newEquipes);
 
         boolean isValide = validator.estValide(p);
 
@@ -154,9 +145,7 @@ public class GestionProjets {
 
         List<Tache> prevTaches = p.getTaches();
 
-        if (newTaches != null) {
-            p.setTaches(newTaches);
-        }
+        p.setTaches(newTaches);
 
         boolean isValide = validator.estValide(p);
 
