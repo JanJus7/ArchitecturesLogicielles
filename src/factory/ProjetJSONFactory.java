@@ -56,7 +56,7 @@ public class ProjetJSONFactory {
             String intitule = tacheJson.getString("intitule");
             int duree = tacheJson.getInt("duree");
             boolean estTerminee = tacheJson.getBoolean("estTerminee");
-            String eqAffectee = tacheJson.getString("equipeAffectee");
+            String eqAffectee = tacheJson.optString("equipeAffectee", null);
             Equipe equipeAffectee = null;
 
             List<Equipe> equipes = projet.getEquipes();
