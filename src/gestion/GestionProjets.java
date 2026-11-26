@@ -1,6 +1,8 @@
 package gestion;
 
 import factory.*;
+import observer.Observateur;
+import observer.Sujet;
 import verification.*;
 import visiteur.Visiteur;
 import visiteur.VisiteurAffichageHierarchique;
@@ -10,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestionProjets {
+public class GestionProjets implements Sujet {
     private final ProjetFactory factory;
     private final CatalogProjets catalogProjets;
     private final ProjetJSONFactory projectJSONFactory;
@@ -88,5 +90,32 @@ public class GestionProjets {
         VisiteurAffichagePlat visiteur = new VisiteurAffichagePlat();
         this.catalogProjets.appliquerVisiteur(visiteur);
         return visiteur.getRes();
+    }
+
+    /*
+    * SUJETS / OVSERVERS
+     */
+
+    public boolean ajouterTache(String nomProj, String intitule, int duree, boolean estTerminee, String nomEquipe) {
+        return this.catalogProjets.ajouterTache(nomProj, intitule, duree, estTerminee, nomEquipe);
+    }
+
+    public boolean supprimerTache(String nomProj, String intitule) {
+        return this.catalogProjets.supprimerTache(nomProj, intitule);
+    }
+
+    @Override
+    public void ajouterObservateur(Observateur o) {
+        this.catalogProjets.ajouterObservateur(o);
+    }
+
+    @Override
+    public void supprimerObservateur(Observateur o) {
+        this.catalogProjets.supprimerObservateur(o);
+    }
+
+    @Override
+    public void notifierObservateurs() {
+        this.catalogProjets.notifierObservateurs();
     }
 }
