@@ -1,5 +1,6 @@
 package vue;
 
+import controlleur.ControlleurProjets;
 import gestion.Equipe;
 import gestion.GestionProjets;
 import gestion.Projet;
@@ -8,11 +9,11 @@ import observer.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.List;
 
 public class VueProjet extends JFrame implements Observateur {
 
+    private final ControlleurProjets controleur;
     private final GestionProjets gestion;
     private Projet projetCourant;
 
@@ -30,9 +31,10 @@ public class VueProjet extends JFrame implements Observateur {
     private final JComboBox<String> comboEquipes = new JComboBox<>();
     private final JCheckBox checkTerminee = new JCheckBox("Terminee");
 
-    public VueProjet(GestionProjets gestion) {
+    public VueProjet(GestionProjets gestion, ControlleurProjets controleur) {
         super("Details du Projet");
         this.gestion = gestion;
+        this.controleur = controleur;
 
         setLayout(new BorderLayout());
 
@@ -102,56 +104,60 @@ public class VueProjet extends JFrame implements Observateur {
         }
     }
 
+    public void setProjetCourant(String nomProjet) {
+        this.projetCourant = gestion.getProjetParNom(nomProjet);
+        this.update();
+    }
+
     private void actionModifierNom() {
-        if (projetCourant == null) return;
-        String nouveauNom = champNom.getText().trim();
-        if (nouveauNom.equals(projetCourant.getNom())) return;
-        if (!gestion.updateProjetNom(projetCourant.getNom(), nouveauNom)) {
-            JOptionPane.showMessageDialog(this, "Nom invalide ou deja pris.");
+        if (projetCourant == null) {
+            return;
+        }
+
+        String err = controleur.modifierNom(projetCourant.getNom(), champNom.getText());
+
+        if (err !=  null) {
+            JOptionPane.showMessageDialog(this, err);
             afficherProjet();
         }
     }
 
     private void actionModifierDateDebut() {
-        if (projetCourant == null) return;
-        try {
-            LocalDate date = LocalDate.parse(champDateDebut.getText().trim());
-            if (!gestion.updateProjetDateDeb(projetCourant.getNom(), date)) {
-                JOptionPane.showMessageDialog(this, "Date de debut invalide.");
-                afficherProjet();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Format attendu : AAAA-MM-JJ");
+        if (projetCourant == null) {
+            return;
+        }
+
+        String err = controleur.modifierDateDebut(projetCourant.getNom(), champDateDebut.getText());
+
+        if (err !=  null) {
+            JOptionPane.showMessageDialog(this, err);
+            afficherProjet();
         }
     }
 
     private void actionModifierDateFin() {
-        if (projetCourant == null) return;
-        try {
-            LocalDate date = LocalDate.parse(champDateFin.getText().trim());
-            if (!gestion.updateProjetDateFin(projetCourant.getNom(), date)) {
-                JOptionPane.showMessageDialog(this, "Date de fin invalide.");
-                afficherProjet();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Format attendu : AAAA-MM-JJ");
+        if (projetCourant == null) {
+            return;
+        }
+
+        String err = controleur.modifierDateFin(projetCourant.getNom(), champDateFin.getText());
+
+        if (err !=  null) {
+            JOptionPane.showMessageDialog(this, err);
+            afficherProjet();
         }
     }
 
     private void actionAjouterTache() {
         if (projetCourant == null) return;
-        try {
-            int duree = Integer.parseInt(champDuree.getText().trim());
-            String equipe = (String) comboEquipes.getSelectedItem();
-            boolean ok = gestion.ajouterTache(
-                    projetCourant.getNom(), champIntitule.getText().trim(), duree, checkTerminee.isSelected(), equipe);
-            if (ok) {
-                champIntitule.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Tache invalide.");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Duree invalide.");
+        String equipe = (String) comboEquipes.getSelectedItem();
+        String err = controleur.ajouterTache(
+                projetCourant.getNom(), champIntitule.getText(), champDuree.getText(),
+                checkTerminee.isSelected(), equipe);
+        if (err == null) {
+            champIntitule.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, err);
         }
     }
 
@@ -161,7 +167,7 @@ public class VueProjet extends JFrame implements Observateur {
             return;
         }
         Tache t = projetCourant.getTaches().get(index);
-        gestion.supprimerTache(projetCourant.getNom(), t.getIntitule());
+        controleur.supprimerTache(projetCourant.getNom(), t.getIntitule());
     }
 
     @Override

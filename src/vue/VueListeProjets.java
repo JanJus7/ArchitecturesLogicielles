@@ -1,5 +1,6 @@
 package vue;
 
+import controlleur.ControlleurProjets;
 import gestion.GestionProjets;
 import gestion.Projet;
 import observer.Observateur;
@@ -12,6 +13,7 @@ import java.util.List;
 public class VueListeProjets extends JFrame implements Observateur {
 
     private final GestionProjets gestion;
+    private final ControlleurProjets controleur;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final JList<String> listeProjets = new JList<>(listModel);
 
@@ -20,9 +22,10 @@ public class VueListeProjets extends JFrame implements Observateur {
     private final JTextField champEquipe = new JTextField("Equipe1");
     private final JTextField champNbMembres = new JTextField("3");
 
-    public VueListeProjets(GestionProjets gestion) {
+    public VueListeProjets(GestionProjets gestion, ControlleurProjets controleur) {
         super("Liste des Projets");
         this.gestion = gestion;
+        this.controleur = controleur;
 
         setLayout(new BorderLayout());
 
@@ -45,10 +48,13 @@ public class VueListeProjets extends JFrame implements Observateur {
         add(new JScrollPane(listeProjets), BorderLayout.CENTER);
 
         JPanel panelBas = new JPanel(new FlowLayout());
+        JButton btnDetails = new JButton("Details");
         JButton btnVerifier = new JButton("Verifier");
         JButton btnSupprimer = new JButton("Supprimer");
+        btnDetails.addActionListener(e -> controleur.ouvrirProjet(listeProjets.getSelectedValue()));
         btnVerifier.addActionListener(e -> actionVerifier());
         btnSupprimer.addActionListener(e -> actionSupprimer());
+        panelBas.add(btnDetails);
         panelBas.add(btnVerifier);
         panelBas.add(btnSupprimer);
         add(panelBas, BorderLayout.SOUTH);
@@ -62,26 +68,21 @@ public class VueListeProjets extends JFrame implements Observateur {
     }
 
     private void actionAjouter() {
-        try {
-            LocalDate date = LocalDate.parse(champDate.getText().trim());
-            int nb = Integer.parseInt(champNbMembres.getText().trim());
-            boolean ok = gestion.createProjet(champNom.getText().trim(), date, champEquipe.getText().trim(), nb);
-            if (ok) {
-                champNom.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Erreur : projet invalide ou doublon.");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Format de date ou de nombre invalide.");
+        String err = controleur.ajouterProjet(
+                champNom.getText(),
+                champDate.getText(),
+                champEquipe.getText(),
+                champNbMembres.getText()
+        );
+        if (err == null) {
+            champNom.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, err);
         }
     }
 
     private void actionSupprimer() {
-        String nom = listeProjets.getSelectedValue();
-        if (nom == null) {
-            return;
-        }
-        gestion.supprimeProjet(nom);
+        controleur.supprimerProjet(listeProjets.getSelectedValue());
     }
 
     private void actionVerifier() {
@@ -89,7 +90,7 @@ public class VueListeProjets extends JFrame implements Observateur {
         if (nom == null) {
             return;
         }
-        List<String> erreurs = gestion.verifierProjet(nom);
+        List<String> erreurs = controleur.verifierProjet(nom);
         if (erreurs.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Projet valide !");
         } else {
