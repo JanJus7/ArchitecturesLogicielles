@@ -58,16 +58,25 @@ public class VueListeProjets extends JFrame implements Observateur {
     }
 
     private JPanel createPanelBas(ControlleurProjets controleur) {
-        JPanel panelBas = new JPanel(new FlowLayout());
+        JPanel panelBas = new JPanel(new GridLayout(2, 3));
         JButton btnDetails = new JButton("Details");
         JButton btnVerifier = new JButton("Verifier");
         JButton btnSupprimer = new JButton("Supprimer");
+        JButton btnHier = new JButton("Hierarchique");
+        JButton btnPlat = new JButton("A plat");
         btnDetails.addActionListener(e -> controleur.ouvrirProjet(listeProjets.getSelectedValue()));
         btnVerifier.addActionListener(e -> actionVerifier());
         btnSupprimer.addActionListener(e -> actionSupprimer());
+        btnHier.addActionListener(e -> JOptionPane.showMessageDialog(
+                this, new JScrollPane(new JTextArea(controleur.getAffichageHierarchique(), 15, 40))));
+        btnPlat.addActionListener(e -> JOptionPane.showMessageDialog(
+                this, new JScrollPane(new JTextArea(controleur.getAffichagePlat(), 15, 40))));
+
         panelBas.add(btnDetails);
         panelBas.add(btnVerifier);
         panelBas.add(btnSupprimer);
+        panelBas.add(btnHier);
+        panelBas.add(btnPlat);
         return panelBas;
     }
 

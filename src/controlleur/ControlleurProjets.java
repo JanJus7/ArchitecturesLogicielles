@@ -129,4 +129,12 @@ public class ControlleurProjets {
         return gestion.supprimerTache(nomProjet, intitule);
     }
 
+    public String getAffichageHierarchique() {
+        return gestion.afficherHierarchique();
+    }
+
+    public String getAffichagePlat() {
+        return gestion.afficherTachesAPlat();
+    }
+
 }
