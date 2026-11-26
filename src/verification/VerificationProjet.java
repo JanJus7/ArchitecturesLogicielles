@@ -26,9 +26,7 @@ public class VerificationProjet {
     public List<String> getErreurs(Projet projet) {
         List<ErreursPossibles> erreurs = validation(projet);
         List<String> listErreurs = new ArrayList<>();
-        erreurs.forEach((erreur) -> {
-            listErreurs.add(erreur.getMessage());
-        });
+        erreurs.forEach((erreur) -> listErreurs.add(erreur.getMessage()));
 
 
 

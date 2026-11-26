@@ -113,9 +113,7 @@ public class ProjetJSONFactory {
             return projet;
         }
 
-        erreuresList.forEach((item) -> {
-            this.erreurs.add("Projet " + projetNom + ", " + item);
-        });
+        erreuresList.forEach((item) -> this.erreurs.add("Projet " + projetNom + ", " + item));
 
         return null;
     }

@@ -174,7 +174,7 @@ public class VueProjet extends JFrame implements Observateur {
     public void update() {
         List<Projet> projets = gestion.getListeProjet();
         if (projetCourant == null || !projets.contains(projetCourant)) {
-            projetCourant = projets.isEmpty() ? null : projets.get(0);
+            projetCourant = projets.isEmpty() ? null : projets.getFirst();
         }
 
         comboProjets.removeAllItems();
@@ -203,12 +203,12 @@ public class VueProjet extends JFrame implements Observateur {
         champDateDebut.setText(projetCourant.getDateDebut().toString());
         champDateFin.setText(projetCourant.getDateFin().toString());
 
-        String equipesTxt = "Equipes : ";
+        StringBuilder equipesTxt = new StringBuilder("Equipes : ");
         for (Equipe e : projetCourant.getEquipes()) {
             comboEquipes.addItem(e.getNom());
-            equipesTxt += e.getNom() + " ";
+            equipesTxt.append(e.getNom()).append(" ");
         }
-        labelEquipes.setText(equipesTxt);
+        labelEquipes.setText(equipesTxt.toString());
 
         for (Tache t : projetCourant.getTaches()) {
             String eq = (t.getEquipeAffectee() != null) ? t.getEquipeAffectee().getNom() : "-";

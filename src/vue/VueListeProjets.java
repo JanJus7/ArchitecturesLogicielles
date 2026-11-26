@@ -7,7 +7,6 @@ import observer.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.List;
 
 public class VueListeProjets extends JFrame implements Observateur {
@@ -47,6 +46,18 @@ public class VueListeProjets extends JFrame implements Observateur {
 
         add(new JScrollPane(listeProjets), BorderLayout.CENTER);
 
+        JPanel panelBas = createPanelBas(controleur);
+        add(panelBas, BorderLayout.SOUTH);
+
+        this.gestion.ajouterObservateur(this);
+        this.update();
+
+        setSize(400, 380);
+        setLocation(100, 100);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    private JPanel createPanelBas(ControlleurProjets controleur) {
         JPanel panelBas = new JPanel(new FlowLayout());
         JButton btnDetails = new JButton("Details");
         JButton btnVerifier = new JButton("Verifier");
@@ -57,14 +68,7 @@ public class VueListeProjets extends JFrame implements Observateur {
         panelBas.add(btnDetails);
         panelBas.add(btnVerifier);
         panelBas.add(btnSupprimer);
-        add(panelBas, BorderLayout.SOUTH);
-
-        this.gestion.ajouterObservateur(this);
-        this.update();
-
-        setSize(400, 380);
-        setLocation(100, 100);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        return panelBas;
     }
 
     private void actionAjouter() {
