@@ -2,6 +2,9 @@ package gestion;
 
 import factory.*;
 import verification.*;
+import visiteur.Visiteur;
+import visiteur.VisiteurAffichageHierarchique;
+import visiteur.VisiteurAffichagePlat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -66,5 +69,24 @@ public class GestionProjets {
 
     public List<Projet> getListeProjet() {
         return this.catalogProjets.getListeProjet();
+    }
+
+    /*
+     * VISITEURS
+     */
+    public void appliquerVisiteur(Visiteur visiteur) {
+        this.catalogProjets.appliquerVisiteur(visiteur);
+    }
+
+    public String afficherHierarchique() {
+        VisiteurAffichageHierarchique visiteur = new VisiteurAffichageHierarchique();
+        this.catalogProjets.appliquerVisiteur(visiteur);
+        return visiteur.getRes();
+    }
+
+    public String afficherTachesAPlat() {
+        VisiteurAffichagePlat visiteur = new VisiteurAffichagePlat();
+        this.catalogProjets.appliquerVisiteur(visiteur);
+        return visiteur.getRes();
     }
 }

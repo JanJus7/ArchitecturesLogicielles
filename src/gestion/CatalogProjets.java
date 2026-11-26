@@ -1,6 +1,7 @@
 package gestion;
 
 import verification.VerificationProjet;
+import visiteur.Visiteur;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -184,6 +185,18 @@ public class CatalogProjets {
 
     public List<Projet> getListeProjet() {
         return new ArrayList<>(this.projets);
+    }
+
+    /*
+     * VISITEURS
+     */
+    public void appliquerVisiteur(Visiteur visiteur) {
+        if (visiteur == null) {
+            return;
+        }
+        for (Projet p : this.projets) {
+            p.accepter(visiteur);
+        }
     }
 
 }
